@@ -17,3 +17,16 @@ export const getCurrentUser = async (
 
   res.status(StatusCodes.OK).json(currentUser)
 }
+
+export const editCurrentUser = async (
+  req: GetCurrentUserRequest,
+  res: Response
+) => {
+  const currentUser = await User.findById(req?.user?.userId)
+  const user = await User.findOneAndUpdate(
+    { email: currentUser?.email },
+    req.body
+  )
+  console.log(req?.user?.email)
+  return res.status(StatusCodes.OK).json(user)
+}

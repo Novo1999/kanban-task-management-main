@@ -4,7 +4,12 @@ import { useEffect } from 'react'
 import useWindowDimensions from '../hooks/useWindowDimension'
 
 const KanbanContent = () => {
-  const { showAddNewModal, showDeleteBoardModal, isTaskDetailsOpen, isSidebarOpen } = useKanban()
+  const {
+    showAddNewModal,
+    showDeleteBoardModal,
+    isTaskDetailsOpen,
+    isSidebarOpen,
+  } = useKanban()
   const windowDimensions = useWindowDimensions()
   const onMobile = windowDimensions.width < 450
 
@@ -15,9 +20,10 @@ const KanbanContent = () => {
     else document.body.style.overflow = 'hidden'
   }, [showAddNewModal, showDeleteBoardModal, isTaskDetailsOpen])
 
-
   return (
-    <section className={`m-auto mt-36 ${isSidebarOpen && !onMobile && 'ml-80'}`}>
+    <section
+      className={`m-auto mt-36 ${isSidebarOpen && !onMobile && 'ml-80'}`}
+    >
       <Status />
       <BoardItem />
       {isTaskDetailsOpen && <TaskDetails />}

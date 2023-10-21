@@ -1,4 +1,4 @@
-import { Outlet, useParams } from 'react-router'
+import { Outlet, useLoaderData, useParams } from 'react-router'
 import { createContext, useState, useContext, useEffect } from 'react'
 import { Header, Sidebar } from '../components'
 import useWindowDimensions from '../hooks/useWindowDimension'
@@ -20,21 +20,21 @@ type KanbanContextProp = {
   setSelectedTask: (id: string) => void
 }
 
-const KanbanContext = createContext < KanbanContextProp > ({
+const KanbanContext = createContext<KanbanContextProp>({
   isSidebarOpen: true,
-  setIsSidebarOpen: () => { },
+  setIsSidebarOpen: () => {},
   showAddNewModal: false,
-  setShowAddNewModal: () => { },
+  setShowAddNewModal: () => {},
   createNewBoard: false,
-  setCreateNewBoard: () => { },
+  setCreateNewBoard: () => {},
   selectedBoard: '',
   setSelectedBoard: (id) => {
     id
   },
   showDeleteBoardModal: false,
-  setShowDeleteBoardModal: () => { },
+  setShowDeleteBoardModal: () => {},
   isTaskDetailsOpen: false,
-  setIsTaskDetailsOpen: () => { },
+  setIsTaskDetailsOpen: () => {},
   selectedTask: '',
   setSelectedTask: (id) => {
     id
@@ -46,16 +46,16 @@ export const useKanban = () => useContext(KanbanContext)
 function KanbanBoard() {
   const windowDimensions = useWindowDimensions()
   const onMobile = windowDimensions.width < 450
-
-  const [isSidebarOpen, setIsSidebarOpen] = useState < boolean > (onMobile ? false : true)
-  const [showAddNewModal, setShowAddNewModal] = useState < boolean > (false)
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(
+    onMobile ? false : true
+  )
+  const [showAddNewModal, setShowAddNewModal] = useState<boolean>(false)
   const [showDeleteBoardModal, setShowDeleteBoardModal] =
-    useState < boolean > (false)
-  const [createNewBoard, setCreateNewBoard] = useState < boolean > (false)
-  const [selectedBoard, setSelectedBoard] = useState < string > ('')
-  const [isTaskDetailsOpen, setIsTaskDetailsOpen] = useState < boolean > (false)
-  const [selectedTask, setSelectedTask] = useState < string > ('')
-
+    useState<boolean>(false)
+  const [createNewBoard, setCreateNewBoard] = useState<boolean>(false)
+  const [selectedBoard, setSelectedBoard] = useState<string>('')
+  const [isTaskDetailsOpen, setIsTaskDetailsOpen] = useState<boolean>(false)
+  const [selectedTask, setSelectedTask] = useState<string>('')
 
   useEffect(() => {
     if (onMobile) setIsSidebarOpen(false)

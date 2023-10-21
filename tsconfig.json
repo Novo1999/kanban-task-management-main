@@ -25,7 +25,10 @@
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.js",
-    "components/TaskDetails.tsx",
-    "server.ts"
+    "server.ts",
+    "client/src/**/*.ts",
+    "client/src/**/*.d.ts",
+    "client/src/**/*.tsx",
+    "client/src/**/*.js"
   ]
 }
