@@ -16,18 +16,21 @@ export interface IFormValues {
   subtask1: string
   subtask2: string
   status: string
-  name?: string
+  name: string
 }
 
 type Task = {
   data: {
-    description: string
-    status: string
-    subtasks: [{ name: string, status: string, _id: string }]
-    title: string
-    _id: string
+    data: {
+      description: string
+      status: string
+      subtasks: Array<{ name: string, status: string, _id: string }>
+      title: string
+      _id: string
+    }
   }
 }
+
 
 type FormRowProps = {
   labelText?: string
@@ -77,7 +80,6 @@ const FormRow = ({
   const { data: board } = useGetBoard()
   const { data: task } = useGetTask() as Task
 
-  console.log(task)
 
   const { register: editBoardRegister, handleSubmit: editBoardSubmit } =
     useForm()
@@ -273,7 +275,7 @@ const FormRow = ({
           autoFocus={name === 'title' && true}
           className={`rounded h-12 pl-2 w-full ${name === 'subtask2' && 'animate-fade animate-duration-500'} `}
           required={required}
-          {...register?.(name)}
+          {...register?.(name as 'name' | 'title' | 'description' | 'subtask1' | 'subtask2' | 'status')}
           type={type}
           name={name}
           placeholder={placeholder}

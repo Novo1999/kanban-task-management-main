@@ -3,7 +3,6 @@ import toast from 'react-hot-toast'
 const errorToaster = (data: {
   response: { data: { message: string; split: (param: string) => string[] } }
 }) => {
-  console.log(data)
   const errors = data?.response?.data?.message?.split(',')
   if (errors && errors.length > 0)
     return errors.map((err) =>

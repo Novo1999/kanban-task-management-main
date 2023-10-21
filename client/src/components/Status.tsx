@@ -90,7 +90,7 @@ const Status = ({ type }: { type?: string }) => {
   )
 
   // all status in a row when user on pc
-  if (width > 500)
+  if (width > 1000)
     return (
       <div className='grid gap-4 sm:grid-cols-3 text-sm'>
         {status.map((status) => (

@@ -25,6 +25,7 @@
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.js",
-    "components/TaskDetails.tsx"
+    "components/TaskDetails.tsx",
+    "server.ts"
   ]
 }
