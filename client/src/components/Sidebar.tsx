@@ -100,7 +100,7 @@ const Sidebar = () => {
         )}
       </div>
       {/* profile */}
-      <div className='flex gap-14 absolute bottom-5 left-5'>
+      <div className='flex gap-14 absolute bottom-9 left-5'>
         <div className='flex flex-col gap-2 items-center profile-options'>
           <span className='text-white text-5xl relative cursor-pointer'>
             {/* profile options when click */}

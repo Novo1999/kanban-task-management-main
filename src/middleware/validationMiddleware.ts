@@ -38,7 +38,7 @@ export const validateRegisterInput = withValidationErrors([
     .isEmail()
     .withMessage('please provide valid email address')
     .custom(async (email) => {
-      const userExists = await User.findOne({ email })
+      const userExists = await User.findOne({ email: email.toLowerCase() })
       if (userExists)
         throw new BadRequestError(
           'An user with the email address already exists.Please log in'
@@ -61,7 +61,7 @@ export const validateLoginInput = withValidationErrors([
     .notEmpty()
     .withMessage('email is required')
     .custom(async (email) => {
-      const userExists = await User.findOne({ email })
+      const userExists = await User.findOne({ email: email.toLowerCase() })
       if (!userExists)
         throw new BadRequestError('No user found by that email.Please Register')
     }),

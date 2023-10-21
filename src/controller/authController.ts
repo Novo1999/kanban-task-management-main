@@ -17,8 +17,8 @@ export const register = async (req: Request, res: Response) => {
 }
 
 export const login = async (req: Request, res: Response) => {
-  const user = await User.findOne({ email: req.body.email.toLowerCase() })
-
+  const email = req.body.email
+  const user = await User.findOne({ email: email.toLowerCase() })
   // checking valid user by checking if the user exists by email and then comparing the hashed password
   const isValidUser =
     user && (await comparePassword(req.body.password, user.password!))
@@ -38,7 +38,8 @@ export const login = async (req: Request, res: Response) => {
     expires: new Date(Date.now() + oneDay),
     secure: process.env.NODE_ENV === 'production',
   })
-  res.status(StatusCodes.OK).json({ msg: 'user logged in' })
+
+  return res.status(StatusCodes.OK).json({ msg: 'user logged in' })
 }
 
 export const logout = async (req: Request, res: Response) => {
