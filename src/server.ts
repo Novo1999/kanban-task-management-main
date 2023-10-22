@@ -21,7 +21,7 @@ const app = express()
 
 app.use(
   cors({
-    origin: [''],
+    origin: ['https://kanban-task-management-main.vercel.app/'],
     methods: ['POST', 'GET'],
     credentials: true,
   })
