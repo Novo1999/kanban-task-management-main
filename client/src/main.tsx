@@ -8,7 +8,7 @@ import { action as registerAction } from './actions/registerAction.ts'
 import { action as loginAction } from './actions/loginAction.ts'
 import { loader as homeLoader } from './loaders/homeLoader.ts'
 import { loader as loginLoader } from './pages/Login.tsx'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import KanbanContent from './pages/KanbanContent.tsx'
