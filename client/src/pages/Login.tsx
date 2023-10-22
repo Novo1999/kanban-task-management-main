@@ -81,6 +81,11 @@ const Login = () => {
                 Register now
               </Link>
             </div>
+            <div className='text-white font-thin'>
+              <h2>Test User</h2>
+              <p>Email: test@gmail.com</p>
+              <p>Password: Password1!</p>
+            </div>
           </Form>
         </div>
       </>
