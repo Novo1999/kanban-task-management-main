@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const customFetch = axios.create({
-  baseURL: 'https://kanban-task-management-api-five.vercel.app/',
+  baseURL: '/api/v1',
 })
 
 export default customFetch
