@@ -135,21 +135,21 @@ const EditInput = () => {
       resetField('name')
       const changedState = { editing: '', status: false }
       setIsEditing(changedState)
-      queryClient.invalidateQueries(['current-user'])
+      queryClient.invalidateQueries({ queryKey: ['current-user'] })
     }
     if (data.email) {
       await editUserEmail(data)
       resetField('email')
       const changedState = { editing: '', status: false }
       setIsEditing(changedState)
-      queryClient.invalidateQueries(['current-user'])
+      queryClient.invalidateQueries({ queryKey: ['current-user'] })
     }
     if (data.password) {
       await editUserPassword(data)
       resetField('password')
       const changedState = { editing: '', status: false }
       setIsEditing(changedState)
-      queryClient.invalidateQueries(['current-user'])
+      queryClient.invalidateQueries({ queryKey: ['current-user'] })
     }
   }
 

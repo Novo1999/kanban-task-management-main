@@ -6,7 +6,7 @@ import { useKanban } from '../pages/KanbanBoard'
 import { editBoardName } from '../utils/editBoardName'
 import { useQueryClient } from '@tanstack/react-query'
 import useGetBoard from '../hooks/useGetBoard'
-import { useGetTask } from '../hooks/useGetTask'
+import { useGetTask } from '../hooks/useGetTask.js'
 import { useState } from 'react'
 
 

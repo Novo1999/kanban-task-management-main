@@ -1,26 +1,33 @@
 import { useEffect } from 'react'
 import { Button, FormRow, Spinner } from '.'
 import { useEditTask } from '../hooks/useEditTask'
-import { useGetTask } from '../hooks/useGetTask'
+import { useGetTask } from '../hooks/useGetTask.js'
 import { UseFormRegister } from 'react-hook-form'
 import { IFormValues } from './FormRow'
 
+const EditTask = ({
+  setIsEditingTask,
+}: {
+  setIsEditingTask: (arg: boolean) => boolean | void
+}) => {
+  const {
+    register,
+    handleSubmit,
+    onSubmit,
+    formState: { isSubmitted },
+  } = useEditTask()
 
-
-const EditTask = ({ setIsEditingTask }: { setIsEditingTask: (arg: boolean) => boolean | void }) => {
-  const { register, handleSubmit, onSubmit, formState: { isSubmitted } } =
-    useEditTask()
-
-  const { data, isLoading: isTaskLoading
-  } = useGetTask() as import('./TaskDetails').UseGetTask
+  const { data, isLoading: isTaskLoading } =
+    useGetTask() as import('./TaskDetails').UseGetTask
 
   useEffect(() => {
-    if (isSubmitted)
-      setIsEditingTask(false)
+    if (isSubmitted) setIsEditingTask(false)
   }, [isSubmitted, setIsEditingTask])
 
-  return (
-    isTaskLoading ? <Spinner /> : <section className='fixed w-80 z-20 m-auto top-0 left-0 bottom-0 right-0 rounded-lg sm:w-[29rem] p-10 h-fit bg-sky-600 shadow-xl animate-flip-down animate-once animate-duration-500'>
+  return isTaskLoading ? (
+    <Spinner />
+  ) : (
+    <section className='fixed w-80 z-20 m-auto top-0 left-0 bottom-0 right-0 rounded-lg sm:w-[29rem] p-10 h-fit bg-sky-600 shadow-xl animate-flip-down animate-once animate-duration-500'>
       <div className='flex justify-between items-center sm:mb-10'>
         <h3 className='text-xl text-white font-semibold'>Edit Task</h3>
         <Button
@@ -30,10 +37,7 @@ const EditTask = ({ setIsEditingTask }: { setIsEditingTask: (arg: boolean) => bo
           }}
         />
       </div>
-      <form
-        onSubmit={handleSubmit(onSubmit)}
-        className='flex flex-col gap-6'
-      >
+      <form onSubmit={handleSubmit(onSubmit)} className='flex flex-col gap-6'>
         <FormRow
           defaultValue={data.data.title}
           labelText='Title'
@@ -66,12 +70,14 @@ const EditTask = ({ setIsEditingTask }: { setIsEditingTask: (arg: boolean) => bo
 }
 export default EditTask
 
-const FormOrButton = ({ register }: { register: UseFormRegister<IFormValues> }) => {
-  const { subtaskField, setSubtaskField, watch } =
-    useEditTask()
+const FormOrButton = ({
+  register,
+}: {
+  register: UseFormRegister<IFormValues>
+}) => {
+  const { subtaskField, setSubtaskField, watch } = useEditTask()
 
-  const { data,
-  } = useGetTask() as import('./TaskDetails').UseGetTask
+  const { data } = useGetTask() as import('./TaskDetails').UseGetTask
   const subtask1HasText = watch('subtask1')?.length > 0
 
   if (data.data.subtasks.length === 2) {
