@@ -1,8 +1,7 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { MdEdit } from 'react-icons/md'
-import { useLoaderData, useNavigate } from 'react-router'
+import { useNavigate } from 'react-router'
 import customFetch from '../utils/customFetch'
-import { Data } from '../loaders/homeLoader'
 import { useForm } from 'react-hook-form'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
 import {
@@ -31,15 +30,6 @@ const SettingsContext = createContext<SettingsContextProp>({
   email: '',
 })
 
-export const getCurrentUser = async () => {
-  try {
-    const { data } = (await customFetch.get('/users/current-user')) as Data
-    return data
-  } catch (error) {
-    return null
-  }
-}
-
 const Settings = () => {
   const [isEditing, setIsEditing] = useState({ editing: '', status: false })
   const navigate = useNavigate()
@@ -52,54 +42,58 @@ const Settings = () => {
 
   // if no email then go to login page
   useEffect(() => {
-    if (data?.data?.email.length === 0) {
+    if (!email) {
       navigate('/')
     }
-  }, [data, navigate])
+  }, [email, navigate])
 
   if (isError) return <p>Error</p>
 
   return (
-    <SettingsContext.Provider value={{ isEditing, setIsEditing, name, email }}>
-      <section className='bg-cyan-600 min-h-screen flex justify-center items-center break-before-page'>
-        <div className='bg-sky-500 rounded-lg shadow-lg p-10 w-screen my-8 mx-6 min-h-[45rem] transition-all duration-300'>
-          <h2 className='font-bold text-white text-3xl mb-10'>
-            Profile Settings
-          </h2>
-          <div className='text-sm'>
-            {/* NAME */}
-            <div className='flex gap-4 mb-4 text-md sm:text-2xl'>
-              <p>Name :</p>
-              {isLoading ? (
-                <p>Loading...</p>
-              ) : (
-                <p className='break-all text-white'>{name}</p>
-              )}
+    email && (
+      <SettingsContext.Provider
+        value={{ isEditing, setIsEditing, name, email }}
+      >
+        <section className='bg-cyan-600 min-h-screen flex justify-center items-center break-before-page'>
+          <div className='bg-sky-500 rounded-lg shadow-lg p-10 w-screen my-8 mx-6 min-h-[45rem] transition-all duration-300'>
+            <h2 className='font-bold text-white text-3xl mb-10'>
+              Profile Settings
+            </h2>
+            <div className='text-sm'>
+              {/* NAME */}
+              <div className='flex gap-4 mb-4 text-md sm:text-2xl'>
+                <p>Name :</p>
+                {isLoading ? (
+                  <p>Loading...</p>
+                ) : (
+                  <p className='break-all text-white'>{name}</p>
+                )}
 
-              <EditButton editing='name' />
+                <EditButton editing='name' />
+              </div>
+              {/* EMAIL */}
+              <div className='flex gap-4 mb-4 text-md sm:text-2xl'>
+                <p className='mr-2'>Email :</p>
+                {isLoading ? (
+                  <p>Loading...</p>
+                ) : (
+                  <p className='break-all text-white'>{email}</p>
+                )}
+                <EditButton editing='email' />
+              </div>
+              {/* PASSWORD */}
+              <div className='flex gap-4 mb-4 text-md sm:text-2xl'>
+                <p>Password :</p>
+                <p className='break-all text-white'>*****************</p>
+                <EditButton editing='password' />
+              </div>
             </div>
-            {/* EMAIL */}
-            <div className='flex gap-4 mb-4 text-md sm:text-2xl'>
-              <p className='mr-2'>Email :</p>
-              {isLoading ? (
-                <p>Loading...</p>
-              ) : (
-                <p className='break-all text-white'>{email}</p>
-              )}
-              <EditButton editing='email' />
-            </div>
-            {/* PASSWORD */}
-            <div className='flex gap-4 mb-4 text-md sm:text-2xl'>
-              <p>Password :</p>
-              <p className='break-all text-white'>*****************</p>
-              <EditButton editing='password' />
-            </div>
+            {/* EDIT INPUT */}
+            <EditInput />
           </div>
-          {/* EDIT INPUT */}
-          <EditInput />
-        </div>
-      </section>
-    </SettingsContext.Provider>
+        </section>
+      </SettingsContext.Provider>
+    )
   )
 }
 export default Settings
