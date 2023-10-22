@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import User from '../model/UserModel.ts'
 import { StatusCodes } from 'http-status-codes'
 import { hashPassword } from '../utils/passwordUtils.ts'
+import { BadRequestError } from '../error/customErrors.ts'
 
 interface GetCurrentUserRequest extends Request {
   user?: {
@@ -25,6 +26,10 @@ export const editUserName = async (
 ) => {
   const currentUser = await User.findById(req?.user?.userId)
 
+  if (currentUser?.email === 'test@gmail.com') {
+    throw new BadRequestError('Demo User, Cannot Change Profile Settings')
+  }
+
   const user = await User.findOneAndUpdate(
     { email: currentUser?.email },
     req.body
@@ -39,6 +44,10 @@ export const editUserEmail = async (
 ) => {
   const currentUser = await User.findById(req?.user?.userId)
 
+  if (currentUser?.email === 'test@gmail.com') {
+    throw new BadRequestError('Demo User, Cannot Change Profile Settings')
+  }
+
   const user = await User.findOneAndUpdate(
     { email: currentUser?.email },
     req.body
@@ -51,6 +60,10 @@ export const editUserPassword = async (
   res: Response
 ) => {
   const currentUser = await User.findById(req?.user?.userId)
+
+  if (currentUser?.email === 'test@gmail.com') {
+    throw new BadRequestError('Demo User, Cannot Change Profile Settings')
+  }
 
   if (req.body.password) {
     req.body.password = hashPassword(req.body.password)
