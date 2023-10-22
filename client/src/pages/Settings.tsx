@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { MdEdit } from 'react-icons/md'
 import { useNavigate } from 'react-router'
 import customFetch from '../utils/customFetch'
-import { useForm } from 'react-hook-form'
+import { FieldValues, SubmitHandler, useForm } from 'react-hook-form'
 import { useQueryClient, useQuery } from '@tanstack/react-query'
 import {
   editUserEmail,
@@ -111,12 +111,6 @@ const EditButton = ({ editing }: { editing: string }) => {
   )
 }
 
-type InputData = {
-  name: string
-  email: string
-  password: string
-}
-
 // edit input
 const EditInput = () => {
   const queryClient = useQueryClient()
@@ -135,7 +129,7 @@ const EditInput = () => {
     return ''
   }
 
-  const onSubmit = async (data: InputData) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
     if (data.name) {
       await editUserName(data)
       resetField('name')

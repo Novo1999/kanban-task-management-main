@@ -2,7 +2,7 @@ import toast from 'react-hot-toast'
 import customFetch from './customFetch.ts'
 import axios from 'axios'
 
-export const editUserName = async (editedName: string) => {
+export const editUserName = async (editedName: { name?: string }) => {
   try {
     const editedUser = await customFetch.patch(
       '/users/edit-username',
@@ -16,7 +16,7 @@ export const editUserName = async (editedName: string) => {
   }
 }
 
-export const editUserEmail = async (editedEmail: string) => {
+export const editUserEmail = async (editedEmail: { email?: string }) => {
   try {
     const editedUser = await customFetch.patch(
       '/users/edit-userEmail',
@@ -29,7 +29,9 @@ export const editUserEmail = async (editedEmail: string) => {
     toast.error('Something went wrong')
   }
 }
-export const editUserPassword = async (editedPassword: string) => {
+export const editUserPassword = async (editedPassword: {
+  password?: string
+}) => {
   try {
     const editedUser = await customFetch.patch(
       '/users/edit-userPassword',
