@@ -14,18 +14,9 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import helmet from 'helmet'
 import ExpressMongoSanitize from 'express-mongo-sanitize'
-import cors from 'cors'
 
 dotenv.config()
 const app = express()
-
-app.use(
-  cors({
-    origin: 'https://kanban-task-management-main.vercel.app',
-    methods: ['POST', 'GET'],
-    credentials: true,
-  })
-)
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
