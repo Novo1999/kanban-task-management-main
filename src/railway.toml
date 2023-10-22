@@ -1,9 +1,0 @@
-[build]
-builder = "nixpacks"
-buildCommand = "npm run setup-production"
-
-[deploy]
-startCommand = "ts-node server.ts"
-healthcheckPath = "/"
-healthcheckTimeout = 100
-restartPolicyType = "never"
