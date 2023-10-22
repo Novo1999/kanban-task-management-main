@@ -9,7 +9,7 @@ import { action as loginAction } from './actions/loginAction.ts'
 import { loader as homeLoader } from './loaders/homeLoader.ts'
 import { loader as loginLoader } from './pages/Login.tsx'
 import { getCurrentUser as userLoader } from './pages/Settings.tsx'
-// import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
 import KanbanContent from './pages/KanbanContent.tsx'
@@ -57,7 +57,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
-      {/* <ReactQueryDevtools initialIsOpen={false} /> */}
+      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </React.StrictMode>
 )

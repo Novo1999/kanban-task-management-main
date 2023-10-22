@@ -48,7 +48,38 @@ export const validateRegisterInput = withValidationErrors([
     .notEmpty()
     .withMessage('password cannot be empty')
     .isLength({ min: 6 })
-    .withMessage('password must be atleast 3 characters')
+    .withMessage('password must be at least 3 characters')
+    .isStrongPassword()
+    .withMessage('please choose a stronger password'),
+])
+
+export const validateEditName = withValidationErrors([
+  body('name')
+    .notEmpty()
+    .withMessage('name cannot be empty')
+    .isLength({ min: 3 })
+    .withMessage('name must be at least 3 characters'),
+])
+export const validateEditEmail = withValidationErrors([
+  body('email')
+    .notEmpty()
+    .withMessage('email cannot be empty')
+    .isEmail()
+    .withMessage('please provide valid email address')
+    .custom(async (email) => {
+      const userExists = await User.findOne({ email: email.toLowerCase() })
+      if (userExists)
+        throw new BadRequestError(
+          'An user with the email address already exists.Please use another email'
+        )
+    }),
+])
+export const validateEditPassword = withValidationErrors([
+  body('password')
+    .notEmpty()
+    .withMessage('password cannot be empty')
+    .isLength({ min: 6 })
+    .withMessage('password must be at least 3 characters')
     .isStrongPassword()
     .withMessage('please choose a stronger password'),
 ])

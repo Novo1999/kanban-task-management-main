@@ -1,9 +1,15 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import { MdEdit } from 'react-icons/md'
-import { useLoaderData } from 'react-router'
+import { useLoaderData, useNavigate } from 'react-router'
 import customFetch from '../utils/customFetch'
 import { Data } from '../loaders/homeLoader'
 import { useForm } from 'react-hook-form'
+import { useQueryClient, useQuery } from '@tanstack/react-query'
+import {
+  editUserEmail,
+  editUserName,
+  editUserPassword,
+} from '../utils/editUser'
 
 type SettingsContextProp = {
   isEditing: { editing: string; status: boolean }
@@ -36,8 +42,22 @@ export const getCurrentUser = async () => {
 
 const Settings = () => {
   const [isEditing, setIsEditing] = useState({ editing: '', status: false })
+  const navigate = useNavigate()
+  const { isLoading, isError, data } = useQuery({
+    queryKey: ['current-user'],
+    queryFn: async () => await customFetch.get('/users/current-user'),
+  })
+  const name = data?.data?.name
+  const email = data?.data?.email
 
-  const { name, email } = useLoaderData() as { name: string; email: string }
+  // if no email then go to login page
+  useEffect(() => {
+    if (data?.data?.email.length === 0) {
+      navigate('/')
+    }
+  }, [data, navigate])
+
+  if (isError) return <p>Error</p>
 
   return (
     <SettingsContext.Provider value={{ isEditing, setIsEditing, name, email }}>
@@ -50,13 +70,22 @@ const Settings = () => {
             {/* NAME */}
             <div className='flex gap-4 mb-4 text-md sm:text-2xl'>
               <p>Name :</p>
-              <p className='break-all text-white'>{name}</p>
+              {isLoading ? (
+                <p>Loading...</p>
+              ) : (
+                <p className='break-all text-white'>{name}</p>
+              )}
+
               <EditButton editing='name' />
             </div>
             {/* EMAIL */}
             <div className='flex gap-4 mb-4 text-md sm:text-2xl'>
               <p className='mr-2'>Email :</p>
-              <p className='break-all text-white'>{email}</p>
+              {isLoading ? (
+                <p>Loading...</p>
+              ) : (
+                <p className='break-all text-white'>{email}</p>
+              )}
               <EditButton editing='email' />
             </div>
             {/* PASSWORD */}
@@ -88,13 +117,21 @@ const EditButton = ({ editing }: { editing: string }) => {
   )
 }
 
+type InputData = {
+  name: string
+  email: string
+  password: string
+}
+
 // edit input
 const EditInput = () => {
-  const { register, handleSubmit } = useForm()
+  const queryClient = useQueryClient()
+  const { register, handleSubmit, resetField } = useForm()
   const {
     isEditing: { status, editing },
     name,
     email,
+    setIsEditing,
   } = useContext(SettingsContext)
 
   const setDefaultValue = () => {
@@ -104,26 +141,52 @@ const EditInput = () => {
     return ''
   }
 
+  const onSubmit = async (data: InputData) => {
+    if (data.name) {
+      await editUserName(data)
+      resetField('name')
+      const changedState = { editing: '', status: false }
+      setIsEditing(changedState)
+      queryClient.invalidateQueries(['current-user'])
+    }
+    if (data.email) {
+      await editUserEmail(data)
+      resetField('email')
+      const changedState = { editing: '', status: false }
+      setIsEditing(changedState)
+      queryClient.invalidateQueries(['current-user'])
+    }
+    if (data.password) {
+      await editUserPassword(data)
+      resetField('password')
+      const changedState = { editing: '', status: false }
+      setIsEditing(changedState)
+      queryClient.invalidateQueries(['current-user'])
+    }
+  }
+
   return (
     status && (
       <div className='mt-20 flex justify-center flex-col items-center animate-fade-up'>
         <h2 className='text-md sm:text-3xl capitalize'>
           {editing === 'password' ? 'Change Password' : `Edit ${editing}`}
         </h2>
-        <input
-          {...register(editing)}
-          key={editing}
-          defaultValue={setDefaultValue()}
-          name={editing}
-          className='h-10 rounded-lg mt-4 w-full pl-2'
-          type='text'
-        />
-        <button
-          className='mt-10 text-2xl bg-cyan-400 p-2 rounded-lg cursor-pointer hover:bg-cyan-300 h-fit transition-all px-4 sm:px-8 sm:py-3 py-1 duration-200'
-          type='submit'
-        >
-          Edit
-        </button>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <input
+            {...register(editing)}
+            key={editing}
+            defaultValue={setDefaultValue()}
+            name={editing}
+            className='h-10 rounded-lg mt-4 w-full pl-2'
+            type='text'
+          />
+          <button
+            className='mt-10 text-2xl bg-cyan-400 p-2 rounded-lg cursor-pointer hover:bg-cyan-300 h-fit transition-all px-4 sm:px-8 sm:py-3 py-1 duration-200'
+            type='submit'
+          >
+            Edit
+          </button>
+        </form>
       </div>
     )
   )

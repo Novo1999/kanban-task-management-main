@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import User from '../model/UserModel.ts'
 import { StatusCodes } from 'http-status-codes'
+import { hashPassword } from '../utils/passwordUtils.ts'
 
 interface GetCurrentUserRequest extends Request {
   user?: {
@@ -18,15 +19,45 @@ export const getCurrentUser = async (
   res.status(StatusCodes.OK).json(currentUser)
 }
 
-export const editCurrentUser = async (
+export const editUserName = async (
   req: GetCurrentUserRequest,
   res: Response
 ) => {
   const currentUser = await User.findById(req?.user?.userId)
+
   const user = await User.findOneAndUpdate(
     { email: currentUser?.email },
     req.body
   )
-  console.log(req?.user?.email)
+
+  return res.status(StatusCodes.OK).json(user)
+}
+
+export const editUserEmail = async (
+  req: GetCurrentUserRequest,
+  res: Response
+) => {
+  const currentUser = await User.findById(req?.user?.userId)
+
+  const user = await User.findOneAndUpdate(
+    { email: currentUser?.email },
+    req.body
+  )
+  return res.status(StatusCodes.OK).json(user)
+}
+
+export const editUserPassword = async (
+  req: GetCurrentUserRequest,
+  res: Response
+) => {
+  const currentUser = await User.findById(req?.user?.userId)
+
+  if (req.body.password) {
+    req.body.password = hashPassword(req.body.password)
+  }
+  const user = await User.findOneAndUpdate(
+    { email: currentUser?.email },
+    req.body
+  )
   return res.status(StatusCodes.OK).json(user)
 }

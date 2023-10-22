@@ -1,7 +1,9 @@
-import { Outlet, useLoaderData, useParams } from 'react-router'
+import { Outlet, useParams } from 'react-router'
 import { createContext, useState, useContext, useEffect } from 'react'
 import { Header, Sidebar } from '../components'
 import useWindowDimensions from '../hooks/useWindowDimension'
+import { useQuery } from '@tanstack/react-query'
+import customFetch from '../utils/customFetch'
 
 type KanbanContextProp = {
   isSidebarOpen: boolean
@@ -56,6 +58,11 @@ function KanbanBoard() {
   const [selectedBoard, setSelectedBoard] = useState<string>('')
   const [isTaskDetailsOpen, setIsTaskDetailsOpen] = useState<boolean>(false)
   const [selectedTask, setSelectedTask] = useState<string>('')
+
+  useQuery({
+    queryKey: ['current-user'],
+    queryFn: async () => await customFetch.get('/users/current-user'),
+  })
 
   useEffect(() => {
     if (onMobile) setIsSidebarOpen(false)

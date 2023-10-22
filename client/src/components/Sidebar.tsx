@@ -10,7 +10,7 @@ import { logOut } from '../utils/logOut'
 import toast from 'react-hot-toast'
 import useWindowDimensions from '../hooks/useWindowDimension'
 import { useGetAllBoards } from '../hooks/useGetAllBoards'
-
+import { Link } from 'react-router-dom'
 
 type Board = {
   boardName: string
@@ -45,9 +45,11 @@ const Sidebar = () => {
     const closeOpenfields = (e: MouseEvent) => {
       const target = e.target as Element
       // board input
-      if (createNewBoard && !target.closest('.board-input')) setCreateNewBoard(false)
+      if (createNewBoard && !target.closest('.board-input'))
+        setCreateNewBoard(false)
       // profile options
-      if (isProfileOptionsOpen && !target.closest('.profile-options')) setIsProfileOptionsOpen(false)
+      if (isProfileOptionsOpen && !target.closest('.profile-options'))
+        setIsProfileOptionsOpen(false)
     }
     document.addEventListener('click', closeOpenfields)
 
@@ -88,7 +90,7 @@ const Sidebar = () => {
           )
         })}
       </div>
-      <div className='relative bottom-12 sm:bottom-6'>
+      <div className='relative bottom-10 sm:bottom-10'>
         {createNewBoard ? (
           <FormRow type='text' name='board' />
         ) : (
@@ -104,15 +106,29 @@ const Sidebar = () => {
         <div className='flex flex-col gap-2 items-center profile-options'>
           <span className='text-white text-5xl relative cursor-pointer'>
             {/* profile options when click */}
-            {isProfileOptionsOpen && <div className='animate-fade-up animate-duration-300 animate-once animate-ease-out absolute text-sm bg-cyan-800 rounded-md w-24 h-20 flex flex-col justify-center left-4 bottom-12'>
-              <button className='p-2 hover:bg-cyan-600 transition-all duration-300 rounded-sm'>Settings</button>
-              <button onClick={async () => {
-                await logOut()
-                toast.success("Logged out successfully")
-                navigate('/')
-              }} className='p-2 hover:bg-cyan-600 transition-all duration-300 rounded-sm'>Log out</button>
-            </div>}
-            <CgProfile onClick={() => setIsProfileOptionsOpen(!isProfileOptionsOpen)} />
+            {isProfileOptionsOpen && (
+              <div className='animate-fade-up animate-duration-300 animate-once animate-ease-out absolute text-sm bg-cyan-800 rounded-md w-24 h-20 flex flex-col justify-center left-4 bottom-12'>
+                <Link
+                  to='/settings'
+                  className='p-2 hover:bg-cyan-600 transition-all duration-300 rounded-sm text-center'
+                >
+                  Settings
+                </Link>
+                <button
+                  onClick={async () => {
+                    await logOut()
+                    toast.success('Logged out successfully')
+                    navigate('/')
+                  }}
+                  className='p-2 hover:bg-cyan-600 transition-all duration-300 rounded-sm'
+                >
+                  Log out
+                </button>
+              </div>
+            )}
+            <CgProfile
+              onClick={() => setIsProfileOptionsOpen(!isProfileOptionsOpen)}
+            />
           </span>
           <p className='capitalize text-white font-semibold text-xs'>
             {user.name.split(' ').at(0)}
