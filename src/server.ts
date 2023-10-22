@@ -13,7 +13,7 @@ import { authenticateUser } from './middleware/authMiddleware.ts'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import helmet from 'helmet'
-import ExpressMongoSanitize from 'express-mongo-sanitize'
+import mongoSanitize from 'express-mongo-sanitize'
 
 dotenv.config()
 const app = express()
@@ -29,7 +29,7 @@ app.use(express.static(path.resolve(__dirname, '../client/dist')))
 app.use(express.json())
 app.use(cookieParser())
 app.use(helmet())
-app.use(ExpressMongoSanitize())
+app.use(mongoSanitize())
 
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/kanban', authenticateUser as () => void, kanbanRouter)
